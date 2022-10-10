@@ -1,0 +1,127 @@
+#define G1 2
+#define R1 3
+#define G2 4
+#define R2 5
+#define G3 6
+#define R3 8
+#define SWITCH_IN 9
+#define SWITCH_OUT 11
+//define the delays for each LED
+int LED_blink = 700;
+//define variable for switch press
+int switch_read; //defining a variable which will read the state of the switch
+int LED_sequence=1; //defining which way the LEDs will light up (left to right or right to left)
+int delay_timer (int milliseconds)
+{
+ int count = 0;
+ while(1)
+ {
+ if(TCNT0 >= 16) // Checking if 1 millisecond has passed
+ {
+ TCNT0=0;
+ count++;
+ if (count == milliseconds) //checking if required milliseconds delay has passed
+ {
+ count=0;
+ break; // exits the loop
+ }
+ }
+ }
+ return 0;
+}
+void setup() {
+ //define pins connected to LEDs as outputs and the switch as input
+  pinMode(G1,OUTPUT);
+  pinMode(R1,OUTPUT);
+  pinMode(G2,OUTPUT);
+  pinMode(R2,OUTPUT);
+  pinMode(G3,OUTPUT);
+  pinMode(R3,OUTPUT);
+  pinMode(SWITCH_OUT,OUTPUT);
+  pinMode (SWITCH_IN,INPUT);
+
+ //set up timer
+ TCCR0A = 0b00000000;
+ TCCR0B = 0b00000101; //setting prescaler for timer clock
+ TCNT0=0;
+}
+void loop() {
+  digitalWrite(SWITCH_OUT, HIGH);
+ switch_read=digitalRead(SWITCH_IN);
+ if (switch_read==LOW){
+ LED_sequence=!LED_sequence;
+ }
+ if (LED_sequence==1){
+ //to make green1 LED blink
+ digitalWrite(G1, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(G1, LOW);
+
+ //to turn red1 LED blink
+ digitalWrite(R1, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(R1, LOW);
+
+ //green2 blink and so on
+ digitalWrite(G2, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(G2, LOW);
+
+ digitalWrite(R2, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(R2, LOW);
+
+ digitalWrite(G3, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(G3, LOW);
+ //green2 blink and so on
+ digitalWrite(R3, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(R3, LOW);
+// digitalWrite(_______, HIGH);
+// digitalWrite(_______, HIGH);
+// digitalWrite(_______, HIGH);
+// digitalWrite(_______, HIGH);
+// digitalWrite(_______, HIGH);
+// digitalWrite(_______, HIGH);
+// delay_timer(LED_blink);
+// delay_timer(LED_blink);
+// digitalWrite(_______, LOW);
+// digitalWrite(_______, LOW);
+// digitalWrite(_______, LOW);
+// digitalWrite(_______, LOW);
+// digitalWrite(_______, LOW);
+// digitalWrite(_______, LOW);
+//
+ delay_timer(LED_blink);
+
+ }
+ else {
+
+ digitalWrite(R3, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(R3, LOW);
+ 
+ digitalWrite(G3, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(G3, LOW);
+ 
+ digitalWrite(R2, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(R2, LOW);
+ 
+ digitalWrite(G2, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(G2, LOW);
+ 
+ digitalWrite(R1, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(R1, LOW);
+ 
+ digitalWrite(G1, HIGH);
+ delay_timer(LED_blink);
+ digitalWrite(G1, LOW);
+ delay_timer(LED_blink);
+
+ }
+}
